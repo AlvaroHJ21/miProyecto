@@ -1,0 +1,93 @@
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+public class Tabla extends JFrame {
+
+    private JTable tabla;
+    private JScrollPane scroll;
+    private JPanel lamina;
+    private JButton boton;
+    private JTextField jtFilas;
+
+    public Tabla() {
+        
+
+        this.lamina = new JPanel();
+        lamina.setLayout(null);
+        lamina.setBounds(0, 0, 800, 500);
+        lamina.setBackground(Color.black);
+        add(lamina);
+        
+        this.boton = new JButton("Star");
+        boton.setBounds(100, 20, 100, 40);
+        lamina.add(boton);
+        boton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                llenarTabla();
+            }
+        });
+        
+        this.jtFilas = new JTextField("Nro Filas");
+        jtFilas.setBounds(220, 20, 200, 40);
+        lamina.add(jtFilas);
+        
+        tabla = new JTable();
+        scroll = new JScrollPane();
+        scroll.setViewportView(tabla);
+        lamina.add(scroll);
+        scroll.setBounds(5, 140, 770, 250);
+        
+        this.setSize(800, 500);
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLayout(null);
+        this.setResizable(false);
+    }
+
+    public void llenarTabla(){
+        String [][] datos = getMatriz();
+        String [] titulos = getTitulos();
+        DefaultTableModel tabla = new DefaultTableModel(datos, titulos);
+        this.tabla.setModel(tabla);
+    }
+    
+    public String [][] getMatriz(){
+        int filas = Integer.parseInt(jtFilas.getText());
+        int columnas = filas*2-1;
+        String [][] datos = new String[filas][columnas];
+        int [][] intDatos = TrianguloPascal.getMatriz(filas);
+        for(int i = 0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
+                if(intDatos[i][j]!=0){
+                    datos[i][j] = String.valueOf(intDatos[i][j]);
+                }else{
+                    datos[i][j] = "";
+                }
+            }
+        }
+        return datos;
+    }
+    
+    public String [] getTitulos(){
+        int filas = Integer.parseInt(jtFilas.getText());
+        String [] titulos = new String[filas*2-1];
+        for(int i = 0; i<filas*2-1;i++){
+            titulos[i] = " ";
+        }
+        return titulos;
+    }
+    
+    public static void main(String[] arg) {
+        Tabla ventana = new Tabla();
+    }
+}
